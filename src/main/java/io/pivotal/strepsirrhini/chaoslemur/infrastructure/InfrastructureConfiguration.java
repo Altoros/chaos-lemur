@@ -21,6 +21,7 @@ import com.amazonaws.regions.Region;
 import com.amazonaws.regions.Regions;
 import com.amazonaws.services.ec2.AmazonEC2;
 import com.amazonaws.services.ec2.AmazonEC2Client;
+import io.pivotal.strepsirrhini.chaoslemur.bosh.cpi.CpiExecutor;
 import org.jclouds.Constants;
 import org.jclouds.ContextBuilder;
 import org.jclouds.logging.slf4j.config.SLF4JLoggingModule;
@@ -41,6 +42,18 @@ class InfrastructureConfiguration {
 
     @Autowired
     DirectorUtils directorUtils;
+
+    @Value("${bosh.cpi.path}")
+    String cpiPath;
+
+    @Bean
+    @ConditionalOnProperty("bosh.cpi.path")
+    CpiExecutor cpiExecutor() {
+        CpiExecutor cpiExecutor = new CpiExecutor();
+        cpiExecutor.setCpiPath(cpiPath);
+        return cpiExecutor;
+    }
+
 
     @Bean
     @ConditionalOnProperty("aws.accessKeyId")
@@ -108,6 +121,12 @@ class InfrastructureConfiguration {
     @ConditionalOnBean(InventoryNavigatorFactory.class)
     VSphereInfrastructure vSphereInfrastructure(DirectorUtils directorUtils, InventoryNavigatorFactory inventoryNavigatorFactory) {
         return new VSphereInfrastructure(directorUtils, inventoryNavigatorFactory);
+    }
+
+    @Bean
+    @ConditionalOnBean(CpiExecutor.class)
+    PhotonInfrastructure photonInfrastructure(DirectorUtils directorUtils, CpiExecutor cpiExecutor) {
+        return new PhotonInfrastructure(directorUtils, cpiExecutor);
     }
 
 }

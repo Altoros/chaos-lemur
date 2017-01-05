@@ -32,7 +32,6 @@ import java.util.Map;
  */
 public class CpiExecutor {
 
-    @Value("${bosh.cpi_path}")
     private String cpiPath;
 
     public void deleteVm(String id) {
@@ -45,13 +44,18 @@ public class CpiExecutor {
         Gson gson = new GsonBuilder().create();
         String argumentMapJson = gson.toJson(argumentMap);
         String[] arguments = new String[]{methodName, argumentMapJson};
-        try {
-            Process exec = Runtime.getRuntime().exec(cpiPath, arguments);
+//        try {
+            System.out.println(cpiPath + " " + arguments);
+//            Process exec = Runtime.getRuntime().exec(cpiPath, arguments);
 //            exec.getOutputStream();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
         return null;
+    }
+
+    public void setCpiPath(String cpiPath) {
+        this.cpiPath = cpiPath;
     }
 
 

@@ -16,23 +16,14 @@
 
 package io.pivotal.strepsirrhini.chaoslemur.infrastructure;
 
-import io.pivotal.strepsirrhini.chaoslemur.Member;
 import io.pivotal.strepsirrhini.chaoslemur.bosh.cpi.CpiExecutor;
 
 /**
- * Created by allomov on 1/4/17.
+ * Created by allomov on 1/5/17.
  */
-public class BoshCpiInfrastructure extends AbstractDirectorUtilsInfrastructure {
+final class PhotonInfrastructure extends BoshCpiInfrastructure {
 
-    private CpiExecutor cpiExecutor;
-
-    BoshCpiInfrastructure(DirectorUtils directorUtils, CpiExecutor cpiExecutor) {
-        super(directorUtils);
-        this.cpiExecutor = cpiExecutor;
-    }
-
-    @Override
-    public void destroy(Member member) throws DestructionException {
-        cpiExecutor.deleteVm(member.getId());
+    PhotonInfrastructure(DirectorUtils directorUtils, CpiExecutor cpiExecutor) {
+        super(directorUtils, cpiExecutor);
     }
 }
